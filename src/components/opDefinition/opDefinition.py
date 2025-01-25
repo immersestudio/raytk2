@@ -130,7 +130,10 @@ def _checkInputType(handler: COMP, typeName: str, typeCategory: str):
 	return f'Input does not support {typeCategory} {typeName}'
 
 def ensureExt(comp):
-	if not getattr(ext, 'opDefinition', None):
+	if not getattr(comp.ext, 'opDefinition', None):
+		comp.par.ext0name = 'opDefinition'
+		comp.par.ext0object = "op.raytk.mod.opDefinition.OpDefinition(me)"
+		comp.par.ext0promote = True
 		comp.par.reinitextensions.pulse()
 
 class _Builder:
@@ -148,7 +151,7 @@ class _Builder:
 	def __init__(self, opDefComp: COMP):
 		# noinspection PyTypeChecker
 		self.defPar = opDefComp.par  # type: OpDefParsT
-		self.defExt = ext.opDefinition
+		self.defExt = opDefComp.ext.opDefinition
 		self.hostOp = self.defPar.Hostop.eval()
 		self.paramsOp = self.defPar.Paramsop.eval() or self.hostOp
 		self.inDats = opDefComp.ops('input_def_[0-9]*')

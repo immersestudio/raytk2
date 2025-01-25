@@ -214,6 +214,17 @@ class LibraryBuilderAsyncBase(BuilderAsyncBase):
 		await self._processOperatorSubCompChildren(comp)
 		self.context.consolidateOperatorPythonModules(comp)
 		self.context.lockBuildLockOps(comp)
+		info = ROPInfo(comp)
+		opDefComp = info.opDef
+		if info.isROP:
+			opDefComp.par.ext0object = "op.raytk.mod.opDefinition.OpDefinition(me)"
+			opDefComp.par.ext0name = 'opDefinition'
+		if info.isRComp:
+			opDefComp.par.ext0object = "op.raytk.mod.compDefinition.CompDefinition(me)"
+			opDefComp.par.ext0name = 'compDefinition'
+		opDefComp.par.ext0object.readOnly = True
+		opDefComp.par.ext0name.readOnly = True
+		opDefComp.par.ext0promote.readOnly = True
 		if not comp.isPanel:
 			comp.showCustomOnly = True
 			self.log('Updating OP image for ' + comp.path)
